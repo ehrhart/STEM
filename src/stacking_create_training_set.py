@@ -1,7 +1,9 @@
 import optparse
 from collections import defaultdict
 import numpy as np
-
+from rdflib import URIRef, Graph, BNode
+from rdflib.namespace import RDF
+import os
 
 class stacking_create_training_set:
 
@@ -10,6 +12,40 @@ class stacking_create_training_set:
            self.input_file_name = input_file_name
            self.output_file_name = output_file_name
            self.N = N
+
+
+    def parse_gold_standard(self, gold_standard_name):
+          #here we build a dictionary containing the gold_standard, (id1,id1) : 1 or 0
+
+          gold_standard = {}
+
+          file_name, file_extension = os.path.splitext(gold_standard_name)
+
+          if file_extension == '.csv':
+              gold_standard_read = open(gold_standard_name,'rU')
+
+              for i in gold_standard_read.readlines():
+                  i = i.split(',') #split at commas
+                  if i[0] == '+': #TP
+                       gold_standard[(i[1],i[2])] = 1
+                  elif i[0] == '-': #FP
+                     gold_standard[(i[1],i[2])] = 0
+
+              gold_standard_read.close()
+          else:
+              g = Graph()
+              result = g.parse(location=gold_standard_name, format=file_extension[1:])
+              for cell in g.subjects(RDF.type, URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#Cell')):
+                  entity1 = g.value(BNode(cell), URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#entity1')).toPython()
+                  entity2 = g.value(BNode(cell), URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#entity2')).toPython()
+                  relation = g.value(BNode(cell), URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#relation')).toPython()
+                  if relation == '=':
+                    gold_standard[(entity1, entity2)] = 1
+                  elif relation == '%':
+                    gold_standard[(entity1, entity2)] = 0
+          ##dictionary: {(id1,id2) : [list_of_configuration_where_the_match_is_found]}
+
+          return gold_standard
 
     #we need to parse the ensemble duke output raw file, which contains the outputs of N different configurations of duke
     #in the file, the output of each configuration is separated by "End of run"
@@ -20,22 +56,10 @@ class stacking_create_training_set:
 
           input_read = open(self.input_file_name,'rU') #read input file
           train = open(self.output_file_name,'w') #write on output file
-          gold_standard_read = open(gold_standard_name,'rU')
           N = self.N
 
           training_dict = defaultdict(list) #for each pair id1,id2 the list of configuration where it is found as integer k
-          gold_standard = {}
-
-          #here we build a dictionary containing the gold_standard, (id1,id1) : 1 or 0
-
-          for i in gold_standard_read.readlines():
-            i = i.split(',') #split at commas
-            if i[0] == '+': #TP
-               gold_standard[(i[1],i[2])] = 1
-            elif i[0] == '-': #FP
-               gold_standard[(i[1],i[2])] = 0
-
-          ##dictionary: {(id1,id2) : [list_of_configuration_where_the_match_is_found]}
+          gold_standard = self.parse_gold_standard(gold_standard_name)
 
           match = 0 
           
@@ -153,7 +177,6 @@ class stacking_create_training_set:
                   train.write('\n')
                 
           input_read.close()
-          gold_standard_read.close()
           train.close()
 
 
@@ -161,23 +184,11 @@ class stacking_create_training_set:
 
           input_read = open(self.input_file_name,'rU') #read input file
           train = open(self.output_file_name,'w') #write on output file
-          gold_standard_read = open(gold_standard_name,'rU')
           N = self.N
 
           training_dict = defaultdict(list) #for each pair id1,id2 the list of configuration where it is found as integer k
-          gold_standard = {}
+          gold_standard = self.parse_gold_standard(gold_standard_name)
 
-          #here we build a dictionary containing the gold_standard, (id1,id1) : 1 or 0
-
-          for i in gold_standard_read.readlines():
-            i = i.split(',') #split at commas
-            if i[0] == '+': #TP
-               gold_standard[(i[1],i[2])] = 1
-            elif i[0] == '-': #FP
-               gold_standard[(i[1],i[2])] = 0
-
-          ##dictionary: {(id1,id2) : [list_of_configuration_where_the_match_is_found]}
-          
           k = 0 #counter
           
           #file to parse
@@ -286,7 +297,6 @@ class stacking_create_training_set:
                   train.write('\n')
                 
           input_read.close()
-          gold_standard_read.close()
           train.close()
 
 
