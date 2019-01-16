@@ -14,7 +14,7 @@ STEM runs several instances of the base entity matcher with different threshold 
 
 - Java 8
 - Python 2.7
-- Python libraries: numpy, scikitlearn, pandas, operator, optparse, xml.etree.ElementTree
+- Python libraries: numpy, scikitlearn, pandas, operator, optparse, xml.etree.ElementTree, rdflib
 
 ##Getting started
 
@@ -75,3 +75,14 @@ The generated output can be in a .csv format:
 or .nt format by specifying --rdf flag:
 
     <id1> <http://www.w3.org/2002/07/owl#sameAs> <id2> .
+
+or EDOAL format by specifying --edoal flag:
+
+    <http://localhost/alignments#1> a align:Alignment;
+      align:map [
+        a align:Cell;
+        align:entity1 <id1>;
+        align:entity2 <id2>;
+        align:measure "1.0"^^xsd:float;
+        align:relation "="
+      ].

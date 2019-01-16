@@ -11,16 +11,18 @@ from sklearn.externals import joblib
 import stacking_create_training_set
 import xml.etree.ElementTree as ET
 import time
-
+from rdflib import URIRef, Graph, BNode, Literal
+from rdflib.namespace import RDF, XSD
 
 class STEM:
 
-    def __init__(self, file_name, N, a,rdf, output_name, log):
+    def __init__(self, file_name, N, a,rdf, edoal, output_name, log):
 
         self.file_name = file_name
         self.N = N
         self.a = a
         self.rdf = rdf
+        self.edoal = edoal
         self.output_name = output_name
         self.log = log
 
@@ -137,7 +139,29 @@ class STEM:
 
         output_name = self.output_name
 
-        if rdf == True:
+        if edoal == True:
+            g = Graph()
+            g.bind('align', URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#'))
+            alignmentIndex = 1
+            for i in id1_id2_output:
+                g.add( (URIRef('http://localhost/alignments#' + str(alignmentIndex)), RDF.type, URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#Alignment') ))
+                alignCell = BNode()
+                g.add( (alignCell, RDF.type, URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#Cell')) )
+                g.add( (alignCell, URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#entity1'), URIRef(str(i[0]))) )
+                g.add( (alignCell, URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#entity2'), URIRef(str(i[1]))) )
+                if i[2] == 1:
+                    g.add( (alignCell, URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#relation'), Literal("=")) )
+                else:
+                    g.add( (alignCell, URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#relation'), Literal("%")) )
+                g.add( (alignCell, URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#measure'), Literal("1.0", datatype=XSD.float)) )
+                g.add( (URIRef('http://localhost/alignments#' + str(alignmentIndex)), URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#map'), alignCell ))
+
+                alignmentIndex += 1
+
+            f = open(path_to_file+output_name, 'w')
+            f.write(g.serialize(format='turtle').decode('utf8'))
+
+        elif rdf == True:
 
             f = open(path_to_file+output_name, 'w')
 
@@ -312,7 +336,29 @@ class STEM:
 
         id1_id2_output = np.concatenate((data.values[:,0:2],output), axis = 1)
 
-        if rdf == True:
+        if edoal == True:
+            g = Graph()
+            g.bind('align', URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#'))
+            alignmentIndex = 1
+            for i in id1_id2_output:
+                g.add( (URIRef('http://localhost/alignments#' + str(alignmentIndex)), RDF.type, URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#Alignment') ))
+                alignCell = BNode()
+                g.add( (alignCell, RDF.type, URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#Cell')) )
+                g.add( (alignCell, URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#entity1'), URIRef(str(i[0]))) )
+                g.add( (alignCell, URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#entity2'), URIRef(str(i[1]))) )
+                if i[2] == 1:
+                    g.add( (alignCell, URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#relation'), Literal("=")) )
+                else:
+                    g.add( (alignCell, URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#relation'), Literal("%")) )
+                g.add( (alignCell, URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#measure'), Literal("1.0", datatype=XSD.float)) )
+                g.add( (URIRef('http://localhost/alignments#' + str(alignmentIndex)), URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#map'), alignCell ))
+
+                alignmentIndex += 1
+
+            f = open(path_to_file+output_name, 'w')
+            f.write(g.serialize(format='turtle').decode('utf8'))
+
+        elif rdf == True:
 
             f = open(path_to_file+output_name, 'w')
 
@@ -447,7 +493,29 @@ class STEM:
 
         id1_id2_output = np.concatenate((data.values[:,0:2],output), axis = 1)
 
-        if rdf == True:
+        if edoal == True:
+            g = Graph()
+            g.bind('align', URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#'))
+            alignmentIndex = 1
+            for i in id1_id2_output:
+                g.add( (URIRef('http://localhost/alignments#' + str(alignmentIndex)), RDF.type, URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#Alignment') ))
+                alignCell = BNode()
+                g.add( (alignCell, RDF.type, URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#Cell')) )
+                g.add( (alignCell, URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#entity1'), URIRef(str(i[0]))) )
+                g.add( (alignCell, URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#entity2'), URIRef(str(i[1]))) )
+                if i[2] == 1:
+                    g.add( (alignCell, URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#relation'), Literal("=")) )
+                else:
+                    g.add( (alignCell, URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#relation'), Literal("%")) )
+                g.add( (alignCell, URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#measure'), Literal("1.0", datatype=XSD.float)) )
+                g.add( (URIRef('http://localhost/alignments#' + str(alignmentIndex)), URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#map'), alignCell ))
+
+                alignmentIndex += 1
+
+            f = open(path_to_file+output_name, 'w')
+            f.write(g.serialize(format='turtle').decode('utf8'))
+
+        elif rdf == True:
 
             f = open(path_to_file+output_name, 'w')
 
@@ -573,7 +641,29 @@ class STEM:
 
         id1_id2_output = np.concatenate((data.values[:,0:2],output), axis = 1)
 
-        if rdf == True:
+        if edoal == True:
+            g = Graph()
+            g.bind('align', URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#'))
+            alignmentIndex = 1
+            for i in id1_id2_output:
+                g.add( (URIRef('http://localhost/alignments#' + str(alignmentIndex)), RDF.type, URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#Alignment') ))
+                alignCell = BNode()
+                g.add( (alignCell, RDF.type, URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#Cell')) )
+                g.add( (alignCell, URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#entity1'), URIRef(str(i[0]))) )
+                g.add( (alignCell, URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#entity2'), URIRef(str(i[1]))) )
+                if i[2] == 1:
+                    g.add( (alignCell, URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#relation'), Literal("=")) )
+                else:
+                    g.add( (alignCell, URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#relation'), Literal("%")) )
+                g.add( (alignCell, URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#measure'), Literal("1.0", datatype=XSD.float)) )
+                g.add( (URIRef('http://localhost/alignments#' + str(alignmentIndex)), URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#map'), alignCell ))
+
+                alignmentIndex += 1
+
+            f = open(path_to_file+output_name, 'w')
+            f.write(g.serialize(format='turtle').decode('utf8'))
+
+        elif rdf == True:
 
             f = open(path_to_file+output_name, 'w')
 
@@ -723,7 +813,29 @@ class STEM:
         id1_id2_output = np.concatenate((data.values[:,0:2],output), axis = 1)
 
 
-        if rdf == True:
+        if edoal == True:
+            g = Graph()
+            g.bind('align', URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#'))
+            alignmentIndex = 1
+            for i in id1_id2_output:
+                g.add( (URIRef('http://localhost/alignments#' + str(alignmentIndex)), RDF.type, URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#Alignment') ))
+                alignCell = BNode()
+                g.add( (alignCell, RDF.type, URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#Cell')) )
+                g.add( (alignCell, URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#entity1'), URIRef(str(i[0]))) )
+                g.add( (alignCell, URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#entity2'), URIRef(str(i[1]))) )
+                if i[2] == 1:
+                    g.add( (alignCell, URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#relation'), Literal("=")) )
+                else:
+                    g.add( (alignCell, URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#relation'), Literal("%")) )
+                g.add( (alignCell, URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#measure'), Literal("1.0", datatype=XSD.float)) )
+                g.add( (URIRef('http://localhost/alignments#' + str(alignmentIndex)), URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#map'), alignCell ))
+
+                alignmentIndex += 1
+
+            f = open(path_to_file+output_name, 'w')
+            f.write(g.serialize(format='turtle').decode('utf8'))
+
+        elif rdf == True:
 
             f = open(path_to_file+output_name, 'w')
 
@@ -864,7 +976,29 @@ class STEM:
         id1_id2_output = np.concatenate((data.values[:,0:2],output), axis = 1)
 
 
-        if rdf == True:
+        if edoal == True:
+            g = Graph()
+            g.bind('align', URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#'))
+            alignmentIndex = 1
+            for i in id1_id2_output:
+                g.add( (URIRef('http://localhost/alignments#' + str(alignmentIndex)), RDF.type, URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#Alignment') ))
+                alignCell = BNode()
+                g.add( (alignCell, RDF.type, URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#Cell')) )
+                g.add( (alignCell, URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#entity1'), URIRef(str(i[0]))) )
+                g.add( (alignCell, URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#entity2'), URIRef(str(i[1]))) )
+                if i[2] == 1:
+                    g.add( (alignCell, URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#relation'), Literal("=")) )
+                else:
+                    g.add( (alignCell, URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#relation'), Literal("%")) )
+                g.add( (alignCell, URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#measure'), Literal("1.0", datatype=XSD.float)) )
+                g.add( (URIRef('http://localhost/alignments#' + str(alignmentIndex)), URIRef('http://knowledgeweb.semanticweb.org/heterogeneity/alignment#map'), alignCell ))
+
+                alignmentIndex += 1
+
+            f = open(path_to_file+output_name, 'w')
+            f.write(g.serialize(format='turtle').decode('utf8'))
+
+        elif rdf == True:
 
             f = open(path_to_file+output_name, 'w')
 
@@ -925,6 +1059,7 @@ if __name__ == '__main__':
     parser.add_option('-s', '--software', dest = 'software_name', help = 'software name')
     parser.add_option('-m', '--model', dest = 'model', help = 'use a pretrained classifier')
     parser.add_option('-t','--rdf', action="store_true", dest="rdf", help = 'ntriples format output')
+    parser.add_option('--edoal', action="store_true", dest="edoal", help = 'edoal format output')
     parser.add_option('-o','--output', dest = 'output_name', help = 'name of the output file')
     parser.add_option('-q','--complete', dest = "gs_complete", action = "store_true", help = "if all positive examples are annotated in the gs")
     parser.add_option('-c','--concise', action="store_false", dest="log", help = 'print a more concise output', default = True)
@@ -955,12 +1090,13 @@ if __name__ == '__main__':
     model = options.model
     output_name = options.output_name
     rdf = options.rdf
+    edoal = options.edoal
     global gs_complete
     gs_complete = options.gs_complete
 
     log = options.log
 
-    stem = STEM(file_name,N,a,rdf, output_name, log)
+    stem = STEM(file_name,N,a,rdf, edoal, output_name, log)
 
     if software_name == 'silk':
 
