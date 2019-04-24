@@ -14,7 +14,7 @@ STEM runs several instances of the base entity matcher with different threshold 
 
 - Java 8
 - Python 2.7
-- Python libraries: numpy, scikitlearn, pandas, operator, optparse, xml.etree.ElementTree, rdflib
+- Python libraries: numpy, scikit-learn, pandas, rdflib
 
 ##Getting started
 
