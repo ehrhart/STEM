@@ -18,7 +18,7 @@ def scorer(file_name,gs):
 
   for i in file_input.readlines():
       i = i.strip('\n')
-      
+
       j = i.split(',') #separate id1 and id2, respectively j[0] and j[1]
       output[(j[0],j[1])] = '+' #in the output file only the positive matches are reported
 
@@ -41,8 +41,8 @@ def scorer(file_name,gs):
              correct += 1
 
           if gold_standard[(id1,id2)] == '-': #false positive
-             wrong += 1 
-             
+             wrong += 1
+
 
       except KeyError: #not all the keys in the output are in the gold standard and viceversa
 
@@ -57,8 +57,8 @@ def scorer(file_name,gs):
   found_matches = 0
 
   for id1,id2 in gold_standard.keys():
-       
-      if gold_standard[(id1,id2)] == '+': #only select positive matches 
+
+      if gold_standard[(id1,id2)] == '+': #only select positive matches
 
          try:
              if output[(id1,id2)] == '+':
@@ -96,7 +96,7 @@ def scorer_return(file_name,gs):
 
   for i in file_input.readlines():
       i = i.strip('\n')
-      
+
       j = i.split(',') #separate id1 and id2, respectively j[0] and j[1]
       output[(j[0],j[1])] = '+' #in the output file only the positive matches are reported
 
@@ -119,8 +119,8 @@ def scorer_return(file_name,gs):
              correct += 1
 
           if gold_standard[(id1,id2)] == '-': #false positive
-             wrong += 1 
-             
+             wrong += 1
+
 
       except KeyError: #not all the keys in the output are in the gold standard and viceversa
 
@@ -135,8 +135,8 @@ def scorer_return(file_name,gs):
   found_matches = 0
 
   for id1,id2 in gold_standard.keys():
-       
-      if gold_standard[(id1,id2)] == '+': #only select positive matches 
+
+      if gold_standard[(id1,id2)] == '+': #only select positive matches
 
          try:
              if output[(id1,id2)] == '+':
@@ -152,7 +152,7 @@ def scorer_return(file_name,gs):
 
   file_input.close()
   gold.close()
-  
+
   return precision, recall, f_score
 
 

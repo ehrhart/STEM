@@ -43,20 +43,20 @@ class Serializer:
 
         path_to_file = path_to_file[0]+'/'
 
-        output_file_raw = open(path_to_file+'ensemble_duke_output_raw_n%d.txt' %N,'w') 
+        output_file_raw = open(path_to_file+'ensemble_duke_output_raw_n%d.txt' %N,'w')
 
         path_to_config_file = file_name.split('/')
         path_to_config_list = path_to_config_file[0:-1] #the last element is the name of the file, I just want the path
-    
+
         #turn the list into a string by iterating and summing
 
         path_to_config = ''
 
         for i in path_to_config_list:
-            path_to_config += i 
+            path_to_config += i
             path_to_config += '/'
 
-        #output_file = open('ensemble_duke_stacking_output_T2_n%d.txt' %N,'w') 
+        #output_file = open('ensemble_duke_stacking_output_T2_n%d.txt' %N,'w')
 
         gold_standard_read = open(gold_standard_name,'rU')
 
@@ -79,21 +79,21 @@ class Serializer:
                 thresh.text = str(threshold)
                 thresh.set('updated','yes')
 
-            path_to_config_and_name = path_to_config+'duke.xml' 
+            path_to_config_and_name = path_to_config+'duke.xml'
 
             tree.write(path_to_config_and_name) #generate a new modified configuration file
 
             java_command = ["java","-Xmx5000m", "-cp", "../lib/Duke/duke-core/target/*:../lib/Duke/duke-dist/target/*:../lib/Duke/duke-es/target/*:../lib/Duke/duke-json/target/*:../lib/Duke/duke-lucene/target/*:../lib/Duke/duke-mapdb/target/*:../lib/Duke/duke-mongodb/target/*:../lib/Duke/duke-server/target/*:../lib/Duke/lucene_jar/*", "no.priv.garshol.duke.Duke", "--showmatches","--batchsize=100000", "--threads=4", "%s" %path_to_config_and_name]
 
             output_file_raw.write(subprocess.check_output(java_command)) #call duke on the copy.xml file and write the raw output on file
-            
+
             output_file_raw.write('\n')
-            output_file_raw.write('End of run\n') 
+            output_file_raw.write('End of run\n')
 
             print 'End of run\n'
 
             os.system('rm %s' %path_to_config_and_name) #remove the new modified configuration file
-            
+
         output_file_raw.close()
 
         #create the training set, named training_set_T1_n%d.csv
@@ -141,25 +141,25 @@ class Serializer:
         path_to_file = path_to_file.split('/gs/')
 
         path_to_file = path_to_file[0]+'/' #data/your_experiment/
-        
+
 
         path_to_config_file = file_name.split('/')
         path_to_config_list = path_to_config_file[0:-1] #the last element is the name of the file, I just want the path, config/your_experiment/config.xml
-    
+
         #turn the list into a string by iterating and summing
 
         path_to_config = ''
 
         for i in path_to_config_list:
-            path_to_config += i 
+            path_to_config += i
             path_to_config += '/'
 
         #open files for writing
 
-        output_file_raw = open(path_to_file+'ensemble_silk_output_raw_n%d.txt' %N,'w') 
+        output_file_raw = open(path_to_file+'ensemble_silk_output_raw_n%d.txt' %N,'w')
 
 
-        #output_file = open('ensemble_duke_stacking_output_T2_n%d.txt' %N,'w') 
+        #output_file = open('ensemble_duke_stacking_output_T2_n%d.txt' %N,'w')
 
         gold_standard_read = open(gold_standard_name,'rU')
 
@@ -174,7 +174,7 @@ class Serializer:
             central_thresh = float(thresh.attrib['minConfidence']) #central value of the threshold
 
         #parsing the silk xml config file to find the name of the output file
- 
+
         for k in root.iter('Output'):
              for b in k.iter('Param'):
                      if b.attrib['name'] == 'file':
@@ -191,11 +191,11 @@ class Serializer:
                 print thresh.attrib['minConfidence']
 
             path_to_config_and_name = path_to_config+'silk.xml' #dconfig/your_experiment/silk.xml
-             
+
             tree.write(path_to_config_and_name) #write the modified xml to file
 
             java_command = "java -Xmx5000m -DconfigFile=%s -Dthreads=4 -jar ../lib/Silk/silk.jar" %path_to_config_and_name
-            
+
             os.system(java_command)
 
             silk_output_name = path_to_config+output_file_name #config/your_experiment/links.nt
@@ -209,13 +209,13 @@ class Serializer:
 
             silk_output.close()
 
-            output_file_raw.write('End of run\n') 
+            output_file_raw.write('End of run\n')
 
             print "End of run\n"
 
             os.system('rm %s' %path_to_config_and_name) #remove the new modified configuration file
 
-            
+
         output_file_raw.close()
 
         #create the training set, named training_set_T1_n%d.csv
@@ -293,5 +293,4 @@ if __name__ == '__main__':
 
         stem_serialize.serialize_stem_duke()
 
-    
 

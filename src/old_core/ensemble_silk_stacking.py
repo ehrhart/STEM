@@ -44,9 +44,9 @@ a = float(options.a)
 
 #open files for writing
 
-output_file_raw = open('ensemble_silk_output_raw_n%d.txt' %N,'w') 
+output_file_raw = open('ensemble_silk_output_raw_n%d.txt' %N,'w')
 
-#output_file = open('ensemble_duke_stacking_output_T2_n%d.txt' %N,'w') 
+#output_file = open('ensemble_duke_stacking_output_T2_n%d.txt' %N,'w')
 
 gold_standard_read = open(gold_standard_name,'rU')
 
@@ -59,7 +59,7 @@ root = tree.getroot()
 
 for thresh in root.iter('Output'):
     central_thresh = float(thresh.attrib['minConfidence']) #central value of the threshold
-    
+
 for k in root.iter('Output'):
      for b in k.iter('Param'):
              if b.attrib['name'] == 'file':
@@ -73,11 +73,11 @@ for threshold in thresholds:
     for thresh in root.iter('Output'):
         thresh.attrib['minConfidence'] = str(threshold)
         #print thresh.attrib['minConfidence']
-     
+
     tree.write('../config/FEIII2016/copy_ffiec_sec.xml') #write the modified xml to file
 
     java_command = "java -Xmx5000m -DconfigFile=../config/FEIII2016/copy_ffiec_sec.xml -Dthreads=4 -jar ../lib/Silk/silk.jar"
-    
+
     os.system(java_command)
 
     data_path = '../config/FEIII2016/'
@@ -96,10 +96,10 @@ for threshold in thresholds:
 
     silk_output.close()
 
-    output_file_raw.write('End of run\n') 
+    output_file_raw.write('End of run\n')
 
     print "End of run\n"
-    
+
 output_file_raw.close()
 
 #create the training set, named training_set_T1_n%d.csv
@@ -133,7 +133,7 @@ for i in id1_id2_output:
         f.write(',')
         f.write(str(i[1]))
         f.write('\n')
-        
+
 f.close()
 
 

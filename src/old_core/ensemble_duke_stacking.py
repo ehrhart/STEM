@@ -51,9 +51,9 @@ path_to_file = path_to_file.split('/gs/')
 
 path_to_file = path_to_file[0]+'/'
 
-output_file_raw = open(path_to_file+'ensemble_duke_output_raw_n%d.txt' %N,'w') 
+output_file_raw = open(path_to_file+'ensemble_duke_output_raw_n%d.txt' %N,'w')
 
-#output_file = open('ensemble_duke_stacking_output_T2_n%d.txt' %N,'w') 
+#output_file = open('ensemble_duke_stacking_output_T2_n%d.txt' %N,'w')
 
 gold_standard_read = open(gold_standard_name,'rU')
 
@@ -78,17 +78,17 @@ for threshold in thresholds:
 
     path_to_file_and_name = path_to_file+'duke.xml'
 
-    tree.write(path_to_file_and_name) 
+    tree.write(path_to_file_and_name)
 
     java_command = ["java","-Xmx5000m", "-cp", "../lib/Duke/duke-core/target/*:../lib/Duke/duke-dist/target/*:../lib/Duke/duke-es/target/*:../lib/Duke/duke-json/target/*:../lib/Duke/duke-lucene/target/*:../lib/Duke/duke-mapdb/target/*:../lib/Duke/duke-mongodb/target/*:../lib/Duke/duke-server/target/*:../lib/Duke/lucene_jar/*", "no.priv.garshol.duke.Duke", "--showmatches","--batchsize=100000", "--threads=4", "%s" %path_to_file_and_name]
 
     output_file_raw.write(subprocess.check_output(java_command)) #call duke on the copy.xml file and write the raw output on file
-    
+
     output_file_raw.write('\n')
-    output_file_raw.write('End of run\n') 
+    output_file_raw.write('End of run\n')
 
     os.system('rm %s' %path_to_file_and_name)
-    
+
 output_file_raw.close()
 
 #create the training set, named training_set_T1_n%d.csv
@@ -122,8 +122,8 @@ for i in id1_id2_output:
         f.write(',')
         f.write(str(i[1]))
         f.write('\n')
-        
-    
+
+
 f.close()
 
 

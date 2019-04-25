@@ -15,14 +15,14 @@ def silk_output_parser(input_file_name,output_file_name,id1,id2):
   train.write('\n')
 
   k = 0 #counter
-      
+
       #file to parse
-      #<http://dbpedia.org/resource/Where_Are_My_Children%3F>  <http://www.w3.org/2002/07/owl#sameAs>  <http://data.linkedmdb.org/resource/film/236> 
+      #<http://dbpedia.org/resource/Where_Are_My_Children%3F>  <http://www.w3.org/2002/07/owl#sameAs>  <http://data.linkedmdb.org/resource/film/236>
 
   for line in input_read.readlines(): #iterate through the lines of the file
-      
+
       line = line.split(' ') #split when there's a space
-      
+
       if line[0] == 'End': #we need to pass to the next configuration
           k += 1
           continue
@@ -33,8 +33,8 @@ def silk_output_parser(input_file_name,output_file_name,id1,id2):
       #ID1_whole = ID1_whole.split('/')
       #ID2_whole = ID2_whole.split('/')
 
-      ID1 = ID1_whole.strip('<').strip('>') 
-      ID2 = ID2_whole.strip('<').strip('>') 
+      ID1 = ID1_whole.strip('<').strip('>')
+      ID2 = ID2_whole.strip('<').strip('>')
 
       train.write(ID1)
       train.write(',')
@@ -73,4 +73,4 @@ if __name__ == '__main__':
     id1 = options.id1
     id2 = options.id2
 
-    silk_output_parser(input_file_name,output_file_name,id1,id2) 
+    silk_output_parser(input_file_name,output_file_name,id1,id2)

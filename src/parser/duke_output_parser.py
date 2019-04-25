@@ -19,22 +19,22 @@ def duke_output_parser(input_file_name,output_file_name,id1,id2):
 
       for line in input_read.readlines():
           line = line.split(' ') #split when there's a space
-          
+
           if line[0] == 'MATCH': #if a match was found
               match = 1
               continue #jump to the next iteration
 
           if match == 1: #MATCH was found one line above
-             train.write(line[1].replace('\'','')) 
+             train.write(line[1].replace('\'',''))
              match = 2
-             continue 
+             continue
 
           if match == 2: #MATCH was found two line above
              train.write(line[1].replace('\'','').strip(','))
              train.write('\n')
              match = 0
              continue
-          
+
       input_read.close()
       train.close()
 
