@@ -320,7 +320,7 @@ class STEM:
         #parameters = [{'kernel' : ['rbf'],'gamma' : np.logspace(-9,3,30),'C': np.logspace(-2,10,30)}, {'kernel' : ['linear'], 'C': np.logspace(-2,10,30)}]
         parameters = {'gamma' : np.logspace(-9,3,30),'C': np.logspace(-2,10,30)}
 
-        gs_rbf = grid_search.GridSearchCV(clf,param_grid=parameters,cv = 4)
+        gs_rbf = model_selection.GridSearchCV(clf,param_grid=parameters,cv = 4)
         gs_rbf.fit(X,y)
 
 
